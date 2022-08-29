@@ -1,0 +1,2 @@
+2021-12-07 14:37:07  00002F38 DEBUG  : [TMQPApi                         ] Cancelando pagamento ID: 4677
+2021-12-07 14:37:08  00003E20 DEBUG  : [TMQPApi                         ] Consultando método: https://sandboxpayment.mentesquepensam.com.br/api/Payment/4677

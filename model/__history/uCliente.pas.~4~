@@ -1,0 +1,57 @@
+unit uCliente;
+
+interface
+
+uses
+   Classes;
+
+type
+   TCliente = class(TPersistent)
+   private
+      vCodCliente: Integer;
+      vNome,
+      vCidade,
+      vUF: String
+   public
+      constructor Create;
+   published
+      property CodCliente: Integer read vCodCliente write vCodCliente;
+      property Nome: String read vNome write vNome;
+      property Cidade: String read vCidade write vCidade;
+      property UF: String read vUF write vUF;
+   end;
+
+   TColItensPedido = Class(TList)
+   public
+      function  Retorna(pIndex: Integer): TCliente;
+      procedure Adiciona(pObj: TObject);
+   end;
+
+implementation
+
+{ TItensPedido }
+
+constructor TCliente.Create;
+begin
+   Self.vIdItem := 0;
+   Self.vQuantidade := 0;
+   Self.vNumPedido := 0;
+   Self.vCodProd := 0;
+   Self.vVlrUnitario := 0;
+   Self.vVlrTotal := 0;
+end;
+
+{ TColItensPedido }
+
+procedure TColItensPedido.Adiciona(pObj: TObject);
+begin
+   Self.Add(TCliente(pObj));
+end;
+
+function TColItensPedido.Retorna(pIndex: Integer): TCliente;
+begin
+   Result := TCliente(Self[pIndex]);
+end;
+
+end.
+

@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2022/08/26 18:24:55.000.209,=C:\Users\SamaraFerreira\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2022/08/26 18:26:29.000.037,C:\Users\SamaraFerreira\Desktop\ProjetoWK\model\uPedidosVenda.dfm=C:\Users\SamaraFerreira\Documents\Embarcadero\Studio\Projects\Unit1.dfm</Transaction>
+    <Transaction>2022/08/26 18:26:29.000.037,C:\Users\SamaraFerreira\Desktop\ProjetoWK\model\uPedidosVenda.pas=C:\Users\SamaraFerreira\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2022/08/26 18:27:31.000.314,C:\Users\SamaraFerreira\Desktop\ProjetoWK\PedidosDeVenda.dproj=C:\Users\SamaraFerreira\Documents\Embarcadero\Studio\Projects\Project1.dproj</Transaction>
+    <Transaction>2022/08/26 18:29:05.000.529,=C:\Users\SamaraFerreira\Desktop\ProjetoWK\model\uConexao.pas</Transaction>
+    <Transaction>2022/08/26 19:45:51.000.844,=C:\Users\SamaraFerreira\Desktop\ProjetoWK\dao\uCabecalhoPedidoDao.pas</Transaction>
+    <Transaction>2022/08/26 19:46:17.000.226,=C:\Users\SamaraFerreira\Desktop\ProjetoWK\dao\uPedidosVendaDao.pas</Transaction>
+    <Transaction>2022/08/26 19:57:00.000.502,=C:\Users\SamaraFerreira\Desktop\ProjetoWK\Unit1.pas</Transaction>
+    <Transaction>2022/08/26 19:57:49.000.543,C:\Users\SamaraFerreira\Desktop\ProjetoWK\Unit1.pas=C:\Users\SamaraFerreira\Desktop\ProjetoWK\dao\uItensPedidoDao.pas</Transaction>
+    <Transaction>2022/08/27 09:16:17.000.787,=C:\Users\SamaraFerreira\Desktop\ProjetoWK\Unit1.pas</Transaction>
+    <Transaction>2022/08/27 09:17:07.000.896,C:\Users\SamaraFerreira\Desktop\ProjetoWK\Unit1.pas=C:\Users\SamaraFerreira\Desktop\ProjetoWK\model\uCabecalhoPedido.pas</Transaction>
+    <Transaction>2022/08/27 09:17:23.000.449,=C:\Users\SamaraFerreira\Desktop\ProjetoWK\Unit1.pas</Transaction>
+    <Transaction>2022/08/27 09:17:41.000.680,C:\Users\SamaraFerreira\Desktop\ProjetoWK\Unit1.pas=C:\Users\SamaraFerreira\Desktop\ProjetoWK\model\uItensPedido.pas</Transaction>
+    <Transaction>2022/08/27 09:42:41.000.471,=C:\Users\SamaraFerreira\Desktop\ProjetoWK\Unit1.pas</Transaction>
+    <Transaction>2022/08/27 09:43:40.000.015,C:\Users\SamaraFerreira\Desktop\ProjetoWK\Unit1.pas=C:\Users\SamaraFerreira\Desktop\ProjetoWK\dao\uClienteDao.pas</Transaction>
+    <Transaction>2022/08/27 09:50:56.000.718,=C:\Users\SamaraFerreira\Desktop\ProjetoWK\Unit1.pas</Transaction>
+    <Transaction>2022/08/27 09:51:28.000.804,C:\Users\SamaraFerreira\Desktop\ProjetoWK\Unit1.pas=C:\Users\SamaraFerreira\Desktop\ProjetoWK\dao\uProdutosDao.pas</Transaction>
+    <Transaction>2022/08/27 12:16:28.000.166,=C:\Users\SamaraFerreira\Desktop\ProjetoWK\model\uCliente.pas</Transaction>
+    <Transaction>2022/08/27 12:16:28.000.235,=C:\Users\SamaraFerreira\Desktop\ProjetoWK\model\uProdutos.pas</Transaction>
+    <Transaction>2022/08/27 13:12:12.000.867,=C:\Users\SamaraFerreira\Desktop\ProjetoWK\Unit1.pas</Transaction>
+    <Transaction>2022/08/27 13:14:15.000.500,C:\Users\SamaraFerreira\Desktop\ProjetoWK\controller\uClienteController.pas=C:\Users\SamaraFerreira\Desktop\ProjetoWK\Unit1.pas</Transaction>
+    <Transaction>2022/08/27 14:53:46.000.915,=C:\Users\SamaraFerreira\Desktop\ProjetoWK\model\uConexaoMySQL.pas</Transaction>
+    <Transaction>2022/08/27 16:00:55.000.011,=C:\Users\SamaraFerreira\Desktop\ProjetoWK\Unit1.pas</Transaction>
+    <Transaction>2022/08/27 16:01:30.000.565,C:\Users\SamaraFerreira\Desktop\ProjetoWK\Unit1.pas=C:\Users\SamaraFerreira\Desktop\ProjetoWK\controller\uProdutosController.pas</Transaction>
+    <Transaction>2022/08/27 16:56:02.000.260,=C:\Users\SamaraFerreira\Desktop\ProjetoWK\Unit1.pas</Transaction>
+    <Transaction>2022/08/27 16:56:05.000.164,=C:\Users\SamaraFerreira\Desktop\ProjetoWK\Unit2.pas</Transaction>
+    <Transaction>2022/08/27 16:57:38.000.546,C:\Users\SamaraFerreira\Desktop\ProjetoWK\Unit1.pas=C:\Users\SamaraFerreira\Desktop\ProjetoWK\controller\uCabecalhoPedidoController.pas</Transaction>
+    <Transaction>2022/08/27 17:07:15.000.523,C:\Users\SamaraFerreira\Desktop\ProjetoWK\Unit2.pas=C:\Users\SamaraFerreira\Desktop\ProjetoWK\controller\uItensPedidoController.pas</Transaction>
+    <Transaction>2022/08/28 00:17:52.000.634,=C:\Users\SamaraFerreira\Desktop\ProjetoWK\view\uPedidosVenda.pas</Transaction>
+    <Transaction>2022/08/28 22:33:00.000.691,=C:\Users\SamaraFerreira\Desktop\ProjetoWK\Unit1.pas</Transaction>
+    <Transaction>2022/08/28 22:34:14.000.898,C:\Users\SamaraFerreira\Desktop\ProjetoWK\view\uConexaoBD.pas=C:\Users\SamaraFerreira\Desktop\ProjetoWK\Unit1.pas</Transaction>
+    <Transaction>2022/08/28 22:34:14.000.898,C:\Users\SamaraFerreira\Desktop\ProjetoWK\view\uConexaoBD.dfm=C:\Users\SamaraFerreira\Desktop\ProjetoWK\Unit1.dfm</Transaction>
+  </Transactions>
+</BorlandProject>

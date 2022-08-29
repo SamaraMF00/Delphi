@@ -1,0 +1,27 @@
+program PedidosDeVenda;
+
+uses
+  Vcl.Forms,
+  uCabecalhoPedidoDao in 'dao\uCabecalhoPedidoDao.pas',
+  uItensPedidoDao in 'dao\uItensPedidoDao.pas',
+  uClienteDao in 'dao\uClienteDao.pas',
+  uProdutosDao in 'dao\uProdutosDao.pas',
+  uCabecalhoPedido in 'model\uCabecalhoPedido.pas',
+  uCliente in 'model\uCliente.pas',
+  uConexao in 'model\uConexao.pas',
+  uItensPedido in 'model\uItensPedido.pas',
+  uProdutos in 'model\uProdutos.pas',
+  uClienteController in 'controller\uClienteController.pas',
+  uProdutosController in 'controller\uProdutosController.pas',
+  uCabecalhoPedidoController in 'controller\uCabecalhoPedidoController.pas',
+  uItensPedidoController in 'controller\uItensPedidoController.pas',
+  uPedidosVenda in 'view\uPedidosVenda.pas'; {frmPedidosVenda}
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TfrmPedidosVenda, frmPedidosVenda);
+  Application.Run;
+end.

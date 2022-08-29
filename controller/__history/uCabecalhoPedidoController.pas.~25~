@@ -1,0 +1,177 @@
+unit uCabecalhoPedidoController;
+
+interface
+
+uses
+   SysUtils, uCabecalhoPedido, uCabecalhoPedidoDao;
+
+type
+
+   TCabecalhoPedidoController = class
+      private
+    function DeletaPedido(pNumPedido: Integer): Boolean;
+
+      public
+         constructor create;
+         function BuscaPedido(pNumPedido: string): TCabecalhoPedido;
+         function GravaPedido(pCodCliente: Integer; pValorTotal: Double): Boolean;
+         function BuscaUltimoPedido: Integer;
+      published
+         class function get: TCabecalhoPedidoController;
+   end;
+
+implementation
+
+uses
+   uConexao;
+
+var
+   _instance: TCabecalhoPedidoController;
+
+constructor TCabecalhoPedidoController.Create;
+begin
+   inherited Create;
+end;
+
+class function TCabecalhoPedidoController.get: TCabecalhoPedidoController;
+begin
+   if _instance = nil then
+      _instance := TCabecalhoPedidoController.Create;
+
+   Result := _instance;
+end;
+
+function TCabecalhoPedidoController.BuscaPedido(pNumPedido: string): TCabecalhoPedido;
+var
+   xCabecalhoPedidoDao: TCabecalhoPedidoDao;
+   xConexao: TConexao;
+begin
+   try
+      try
+         Result := nil;
+         xCabecalhoPedidoDao := nil;
+         xConexao := nil;
+
+         xConexao := TConexao.create;
+
+         xCabecalhoPedidoDao := TCabecalhoPedidoDao.Create(xConexao.getConexao);
+
+         Result := xCabecalhoPedidoDao.RetornaCabecalhoPedido('NumPedido = '+ pNumPedido);
+      finally
+         if xCabecalhoPedidoDao <> nil then
+            FreeAndNil(xCabecalhoPedidoDao);
+         if xConexao <> nil then
+            FreeAndNil(xConexao);
+      end;
+   except
+      on E : Exception do
+      begin
+         Raise Exception.Create(
+            'Falha ao retornar dados do pedido[Controller]. '+e.Message);
+      end;
+   end;
+end;
+
+function TCabecalhoPedidoController.GravaPedido(pCodCliente: Integer; pValorTotal: Double): Boolean;
+var
+   xCabecalhoPedidoDao: TCabecalhoPedidoDao;
+   xConexao: TConexao;
+   xCabecalhoPedido: TCabecalhoPedido;
+begin
+   try
+      try
+         Result := False;
+         xCabecalhoPedidoDao := nil;
+         xConexao := nil;
+         xCabecalhoPedido := nil;
+
+         xCabecalhoPedido := TCabecalhoPedido.Create;
+         xConexao := TConexao.create;
+
+         xCabecalhoPedido.CodCliente := pCodCliente;
+         xCabecalhoPedido.DataEmissao := Now;
+         xCabecalhoPedido.ValorTotal := pValorTotal;
+
+         xCabecalhoPedidoDao := TCabecalhoPedidoDao.Create(xConexao.getConexao);
+
+         Result := xCabecalhoPedidoDao.InserirCabecalhoPedido(xCabecalhoPedido);
+      finally
+         if xCabecalhoPedido <> nil then
+            FreeAndNil(xCabecalhoPedido);
+         if xCabecalhoPedidoDao <> nil then
+            FreeAndNil(xCabecalhoPedidoDao);
+         if xConexao <> nil then
+            FreeAndNil(xConexao);
+      end;
+   except
+      on E : Exception do
+      begin
+         Raise Exception.Create(
+            'Falha ao gravar dados do pedido[Controller]. '+e.Message);
+      end;
+   end;
+end;
+
+function TCabecalhoPedidoController.BuscaUltimoPedido: Integer;
+var
+   xCabecalhoPedidoDao: TCabecalhoPedidoDao;
+   xConexao: TConexao;
+begin
+   try
+      try
+         Result := 0;
+         xCabecalhoPedidoDao := nil;
+         xConexao := nil;
+
+         xConexao := TConexao.create;
+
+         xCabecalhoPedidoDao := TCabecalhoPedidoDao.Create(xConexao.getConexao);
+
+         Result := xCabecalhoPedidoDao.RetornaUltimoNumPedido;
+      finally
+         if xCabecalhoPedidoDao <> nil then
+            FreeAndNil(xCabecalhoPedidoDao);
+         if xConexao <> nil then
+            FreeAndNil(xConexao);
+      end;
+   except
+      on E : Exception do
+      begin
+         Raise Exception.Create(
+            'Falha ao retornar último número de pedido Controller]. '+e.Message);
+      end;
+   end;
+end;
+
+function TCabecalhoPedidoController.DeletaPedido(pNumPedido: Integer): Boolean;
+var
+   xCabecalhoPedidoDao: TCabecalhoPedidoDao;
+   xConexao: TConexao;
+begin
+   try
+      try
+         Result := False;
+         xCabecalhoPedidoDao := nil;
+         xConexao := nil;
+
+         xConexao := TConexao.create;
+
+         xCabecalhoPedidoDao := TCabecalhoPedidoDao.Create(xConexao.getConexao);
+
+         Result := xCabecalhoPedidoDao.DeletarCabecalhoPedido(pNumPedido);
+      finally
+         if xCabecalhoPedidoDao <> nil then
+            FreeAndNil(xCabecalhoPedidoDao);
+         if xConexao <> nil then
+            FreeAndNil(xConexao);
+      end;
+   except
+      on E : Exception do
+      begin
+         Raise Exception.Create(
+            'Falha ao gravar dados do pedido[Controller]. '+e.Message);
+      end;
+   end;
+end;
+
+end.

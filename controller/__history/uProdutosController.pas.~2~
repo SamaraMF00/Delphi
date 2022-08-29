@@ -1,0 +1,72 @@
+unit uProdutosController;
+
+interface
+
+uses
+   SysUtils, uProdutos, uProdutosDao;
+
+type
+
+   TProdutosController = class
+      private
+
+      public
+         constructor create;
+         function BuscaCliente(pCodCliente: string): TCliente;
+      published
+         class function get: TProdutosController;
+   end;
+
+implementation
+
+uses
+   uConexao;
+
+var
+   _instance: TProdutosController;
+
+constructor TProdutosController.Create;
+begin
+   inherited Create;
+end;
+
+class function TProdutosController.get: TProdutosController;
+begin
+   if _instance = nil then
+      _instance := TProdutosController.Create;
+
+   Result := _instance;
+end;
+
+function TProdutosController.BuscaCliente(pCodCliente: string): TCliente;
+var
+   xClienteDao: TClienteDao;
+   xConexao: TConexao;
+begin
+   try
+      try
+         Result := nil;
+         xClienteDao := nil;
+         xConexao := nil;
+
+         xConexao := TConexao.create;
+
+         xClienteDao := TClienteDao.Create(xConexao.getConexao);
+
+         Result := xClienteDao.RetornaCliente('CodCliente = '+ pCodCliente);
+      finally
+         if xClienteDao <> nil then
+            FreeAndNil(xClienteDao);
+         if xConexao <> nil then
+            FreeAndNil(xConexao);
+      end;
+   except
+      on E : Exception do
+      begin
+         Raise Exception.Create(
+            'Falha ao retornar dados do cliente [Controller]. '+e.Message);
+      end;
+   end;
+end;
+
+end.

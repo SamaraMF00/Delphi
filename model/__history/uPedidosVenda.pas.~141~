@@ -1,0 +1,508 @@
+unit uPedidosVenda;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls, Vcl.Buttons,
+  NumEdit, Data.DB, Vcl.Grids, Vcl.DBGrids, Data.Win.ADODB, Datasnap.DBClient;
+
+type
+  TfrmPedidosVenda = class(TForm)
+    pnlFundo: TPanel;
+    edtNumPedido: TEdit;
+    edtCodCliente: TEdit;
+    edtCodProd: TEdit;
+    edtQuantidade: TNumEdit;
+    edtVlrUnitario: TNumEdit;
+    lblNumPedido: TLabel;
+    lblCodCliente: TLabel;
+    edtNomeCliente: TEdit;
+    edtDescricao: TEdit;
+    lblProduto: TLabel;
+    lblQuantidade: TLabel;
+    lblVlrUnitario: TLabel;
+    btnAdicionar: TBitBtn;
+    dbgProdutos: TDBGrid;
+    pnlBotoes: TPanel;
+    lblTotalPedido: TLabel;
+    btnConsulta: TBitBtn;
+    btnCancelar: TBitBtn;
+    btnGravar: TBitBtn;
+    btnInserir: TBitBtn;
+    cdsProdutos: TClientDataSet;
+    dsProdutos: TDataSource;
+    cdsProdutosCodProd: TIntegerField;
+    cdsProdutosDescricao: TStringField;
+    cdsProdutosQuantidade: TIntegerField;
+    cdsProdutosVlrUnitario: TFloatField;
+    cdsProdutosVlrTotal: TFloatField;
+    procedure edtNumPedidoKeyPress(Sender: TObject; var Key: Char);
+    procedure edtCodClienteKeyPress(Sender: TObject; var Key: Char);
+    procedure edtCodProdKeyPress(Sender: TObject; var Key: Char);
+    procedure btnInserirClick(Sender: TObject);
+    procedure btnConsultaClick(Sender: TObject);
+    procedure btnCancelarClick(Sender: TObject);
+    procedure btnGravarClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure edtCodClienteExit(Sender: TObject);
+    procedure edtCodProdExit(Sender: TObject);
+    procedure btnAdicionarClick(Sender: TObject);
+    procedure dbgProdutosDblClick(Sender: TObject);
+    procedure edtNumPedidoExit(Sender: TObject);
+  private
+     vOpcaoTela: string;
+     vKey: Word;
+     vAlteracao: Boolean;
+    function somenteNumeros(pKey: char): Boolean;
+    procedure tratamentoTela;
+    procedure buscaCliente;
+    procedure buscaProduto;
+    function validaCampos: Boolean;
+    function validaCodCliente: Boolean;
+    function validaCodProd: Boolean;
+    function validaQuantidade: Boolean;
+    function validaVlrUnitario: Boolean;
+    procedure adicionaProduto;
+    procedure limpaCampos;
+    function salvarDados: Boolean;
+    procedure consultaPedido;
+    function validaNumPedido: Boolean;
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmPedidosVenda: TfrmPedidosVenda;
+
+implementation
+
+uses
+   uClienteController, uCliente, uProdutos, uProdutosController, uCabecalhoPedido,
+   uItensPedido, uCabecalhoPedidoController, uItensPedidoController;
+
+{$R *.dfm}
+
+procedure TfrmPedidosVenda.btnAdicionarClick(Sender: TObject);
+begin
+   if validaCampos then
+      adicionaProduto;
+end;
+
+procedure TfrmPedidosVenda.btnCancelarClick(Sender: TObject);
+begin
+   vOpcaoTela := 'C';
+   tratamentoTela;
+end;
+
+procedure TfrmPedidosVenda.btnConsultaClick(Sender: TObject);
+begin
+   vOpcaoTela := 'P';
+   tratamentoTela;
+end;
+
+procedure TfrmPedidosVenda.btnGravarClick(Sender: TObject);
+begin
+   vOpcaoTela := 'G';
+   begin
+      if salvarDados then
+         tratamentoTela;
+   end;
+end;
+
+procedure TfrmPedidosVenda.btnInserirClick(Sender: TObject);
+begin
+   vOpcaoTela := 'I';
+   tratamentoTela;
+end;
+
+procedure TfrmPedidosVenda.edtCodClienteExit(Sender: TObject);
+begin
+   if (vKey = 13) and (edtCodCliente.Text <> '') then
+      buscaCliente(edtCodCliente.Text);
+end;
+
+procedure TfrmPedidosVenda.edtCodClienteKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+   if not SomenteNumeros(Key) then
+      Key := #0;
+   if edtCodCliente.Text = '' then
+      edtNomeCliente.Text := '';
+end;
+
+procedure TfrmPedidosVenda.edtCodProdExit(Sender: TObject);
+begin
+   if (vKey = 13) and (edtCodProd.Text <> '') then
+      buscaProduto;
+end;
+
+procedure TfrmPedidosVenda.edtCodProdKeyPress(Sender: TObject; var Key: Char);
+begin
+   if not SomenteNumeros(Key) then
+      Key := #0;
+   if edtCodProd.Text = '' then
+      edtDescricao.Text := '';
+end;
+
+procedure TfrmPedidosVenda.edtNumPedidoExit(Sender: TObject);
+begin
+   if (vKey = 13) and (vOpcaoTela = 'P') then
+      consultaPedido;
+end;
+
+procedure TfrmPedidosVenda.edtNumPedidoKeyPress(Sender: TObject; var Key: Char);
+begin
+   if not SomenteNumeros(Key) then
+      Key := #0;
+end;
+
+function TfrmPedidosVenda.SomenteNumeros(pKey: char): Boolean;
+begin
+   Result := True;
+
+   if (pKey in ['0'..'9'] = false) and
+      (Word(pKey) <> VK_Back) and
+      (Word(pKey) <> VK_Return) then
+      Result := False;
+end;
+
+procedure TfrmPedidosVenda.tratamentoTela;
+begin
+   if vOpcaoTela = 'I' then
+   begin
+      btnConsulta.Enabled := False;
+      pnlFundo.Enabled := True;
+      edtNumPedido.Enabled := False;
+      edtNomeCliente.Enabled := False;
+      edtDescricao.Enabled := False;
+      btnCancelar.Enabled := True;
+      btnGravar.Enabled := True;
+      edtCodProd.Enabled := True;
+      edtCodCliente.Enabled := True;
+      edtQuantidade.Enabled := True;
+      edtVlrUnitario.Enabled := True;
+      btnAdicionar.Enabled := True;
+      btnInserir.Enabled := False;
+
+      if edtCodCliente.CanFocus then
+         edtCodCliente.SetFocus;
+   end
+   else
+   if vOpcaoTela = 'P' then
+   begin
+      pnlFundo.Enabled := True;
+      btnGravar.Enabled := False;
+      btnInserir.Enabled := False;
+      edtNumPedido.Enabled := True;
+      btnCancelar.Enabled := True;
+      btnConsulta.Enabled := False;
+
+      if edtNumPedido.CanFocus then
+         edtNumPedido.SetFocus;
+   end
+   else
+   begin
+      limpaCampos;
+      edtNomeCliente.Enabled := False;
+      edtDescricao.Enabled := False;
+      pnlFundo.Enabled := False;
+      btnGravar.Enabled := False;
+      btnCancelar.Enabled := False;
+      btnInserir.Enabled := True;
+      btnConsulta.Enabled := True;
+      edtCodProd.Enabled := False;
+      edtCodCliente.Enabled := False;
+      edtQuantidade.Enabled := False;
+      edtVlrUnitario.Enabled := False;
+      btnAdicionar.Enabled := False;
+      edtNumPedido.Enabled := False;
+   end;
+end;
+
+procedure TfrmPedidosVenda.FormCreate(Sender: TObject);
+begin
+   vOpcaoTela := '';
+   tratamentoTela;
+end;
+
+procedure TfrmPedidosVenda.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+   vKey := Key;
+
+   case vKey of
+      VK_RETURN:
+      begin
+         if (ActiveControl <> dbgProdutos) then
+            Perform(WM_NextDlgCtl, 0, 0);
+      end;
+
+      VK_ESCAPE:
+         if MessageDlg('Deseja fechar a tela?', mtConfirmation,
+            [mbYes, mbNo], 0) = mrYes then
+            Close;
+
+      VK_UP :
+      begin
+         vKey := VK_CLEAR;
+         if (ActiveControl <> dbgProdutos)then
+            Perform(WM_NextDlgCTL,1,0);
+      end;
+   end;
+end;
+
+procedure TfrmPedidosVenda.buscaCliente(pCodCliente: string);
+var
+   xCliente: TCliente;
+begin
+   try
+      try
+         xCliente := nil;
+         xCliente := TClienteController.get.buscaCliente(pCodCliente);
+
+         if xCliente <> nil then
+            edtNomeCliente.Text := xCliente.Nome
+         else
+            MessageDlg('Cliente não cadastrado!', mtWarning,[mbOk],0);
+      finally
+         if xCliente <> nil then
+            FreeAndNil(xCliente);
+      end;
+   except
+      on E : Exception do
+         MessageDlg(e.Message, mtError,[mbOk],0);
+   end;
+end;
+
+procedure TfrmPedidosVenda.buscaProduto;
+var
+   xProdutos: TProdutos;
+begin
+   try
+      try
+         xProdutos := nil;
+         xProdutos := TProdutosController.get.buscaProduto(edtCodCliente.Text);
+
+         if xProdutos <> nil then
+         begin
+            edtDescricao.Text := xProdutos.Descricao;
+            edtVlrUnitario.Value := xProdutos.PrecoVenda;
+         end
+         else
+            MessageDlg('Produto não cadastrado!', mtWarning,[mbOk],0);
+      finally
+         if xProdutos <> nil then
+            FreeAndNil(xProdutos);
+      end;
+   except
+      on E : Exception do
+         MessageDlg(e.Message, mtError,[mbOk],0);
+   end;
+end;
+
+procedure TfrmPedidosVenda.dbgProdutosDblClick(Sender: TObject);
+begin
+   vAlteracao := True;
+   edtCodProd.Text := IntToStr(cdsProdutos.FieldByName('CodProd').AsInteger);
+   edtDescricao.Text := cdsProdutos.FieldByName('Descricao').AsString;
+   edtQuantidade.Value := cdsProdutos.FieldByName('Quantidade').AsInteger;
+   edtVlrUnitario.Value := cdsProdutos.FieldByName('VlrUnitario').AsFloat;
+   edtCodProd.Enabled := False;
+end;
+
+function TfrmPedidosVenda.validaCampos: Boolean;
+var
+   xMsgmCampoVazio: string;
+begin
+   Result := False;
+
+   if (not validaCodProd) or
+      (not validaCodCliente) or
+      (not validaQuantidade) or
+      (not validaVlrUnitario) then
+      Exit;
+
+   Result := True;
+end;
+
+function TfrmPedidosVenda.validaCodProd: Boolean;
+begin
+   Result := False;
+
+   if (edtCodProd.Text = '') or (edtDescricao.Text = '') then
+   begin
+      MessageDlg('Digite um código de produto válido!', mtWarning,[mbOk],0);
+      if edtCodProd.CanFocus then
+         edtCodProd.SetFocus;
+      Exit;
+   end;
+
+   Result := True;
+end;
+
+function TfrmPedidosVenda.validaCodCliente: Boolean;
+begin
+   Result := False;
+
+   if (edtCodCliente.Text = '') or (edtNomeCliente.Text = '') then
+   begin
+      MessageDlg('Digite um código de cliente válido!', mtWarning,[mbOk],0);
+      if edtCodCliente.CanFocus then
+         edtCodCliente.SetFocus;
+      Exit;
+   end;
+
+   Result := True;
+end;
+
+function TfrmPedidosVenda.validaQuantidade: Boolean;
+begin
+   Result := False;
+
+   if (edtQuantidade.Value = 0) then
+   begin
+      MessageDlg('Quantidade deve ser maior que 0.', mtWarning,[mbOk],0);
+      if edtQuantidade.CanFocus then
+         edtQuantidade.SetFocus;
+      Exit;
+   end;
+
+   Result := True;
+end;
+
+function TfrmPedidosVenda.validaVlrUnitario: Boolean;
+begin
+   Result := False;
+
+   if (edtVlrUnitario.Value = 0) then
+   begin
+      MessageDlg('Valor unitário deve ser maior que 0.', mtWarning,[mbOk],0);
+      if edtVlrUnitario.CanFocus then
+         edtVlrUnitario.SetFocus;
+      Exit;
+   end;
+
+   Result := True;
+end;
+
+function TfrmPedidosVenda.validaNumPedido: Boolean;
+begin
+   Result := False;
+
+   if (edtNumPedido.Text = '') then
+   begin
+      MessageDlg('Digite o número do pedido para consulta.', mtWarning,[mbOk],0);
+      if edtNumPedido.CanFocus then
+         edtNumPedido.SetFocus;
+      Exit;
+   end;
+
+   Result := True;
+end;
+
+procedure TfrmPedidosVenda.adicionaProduto;
+begin
+   if vAlteracao then
+      cdsProdutos.Edit
+   else
+      cdsProdutos.Append;
+
+   cdsProdutos.FieldByName('CodProd').AsInteger := StrToInt(edtCodProd.Text);
+   cdsProdutos.FieldByName('Descricao').AsString := edtDescricao.Text;
+   cdsProdutos.FieldByName('Quantidade').AsInteger := StrToInt(edtQuantidade.Text);
+   cdsProdutos.FieldByName('VlrUnitario').AsFloat := edtVlrUnitario.Value;
+   cdsProdutos.FieldByName('VlrTotal').AsFloat := edtQuantidade.Value * edtVlrUnitario.Value;
+   cdsProdutos.Post;
+
+   vAlteracao := False;
+   edtCodProd.Enabled := True;
+end;
+
+procedure TfrmPedidosVenda.limpaCampos;
+begin
+   edtNumPedido.Text := '';
+   edtCodCliente.Text := '';
+   edtNomeCliente.Text := '';
+   edtCodProd.Text := '';
+   edtDescricao.Text := '';
+   edtQuantidade.Value := 0;
+   edtVlrUnitario.Value := 0;
+end;
+
+function TfrmPedidosVenda.salvarDados: Boolean;
+var
+   xValorTotal: Double;
+begin
+   try
+      Result := False;
+      xValorTotal:= 0;
+
+      if cdsProdutos.IsEmpty then
+      begin
+         MessageDlg('Insira ao menos um produto para prosseguir.', mtWarning,[mbOk],0);
+         Exit;
+      end
+      else
+      if not validaCodCliente then
+         Exit;
+
+      cdsProdutos.First;
+
+      while not cdsProdutos.Eof do
+      begin
+         xValorTotal :=  xValorTotal + cdsProdutos.FieldByName('VlrTotal').AsFloat;
+         cdsProdutos.Next;
+      end;
+
+      cdsProdutos.First;
+
+      if not (TCabecalhoPedidoController.get.GravaPedido(
+         StrToInt(edtCodCliente.Text), xValorTotal) and
+         TItensPedidoController.get.GravaItensPedido(cdsProdutos)) then
+         Exit;
+
+      Result := True;
+   except
+      on E : Exception do
+         MessageDlg(e.Message, mtError,[mbOk],0);
+   end;
+end;
+
+procedure TfrmPedidosVenda.consultaPedido;
+var
+   xCabecalhoPedido: TCabecalhoPedido;
+begin
+   try
+      try
+         xCabecalhoPedido := nil;
+
+         if not validaNumPedido then
+         Exit;
+
+         xCabecalhoPedido := TCabecalhoPedido.Create;
+         xCabecalhoPedido := TCabecalhoPedidoController.get.BuscaPedido(edtNumPedido.Text);
+
+         if xCabecalhoPedido = nil then
+         begin
+            MessageDlg('Pedido não cadastrado.', mtWarning,[mbOk],0);
+            Exit;
+         end;
+
+         edtNumPedido.Text := IntToStr(xCabecalhoPedido.NumPedido);
+         buscaCliente(xCabecalhoPedido.CodCliente);
+
+         TItensPedidoController.get.BuscaItensPedido(xCabecalhoPedido.NumPedido, cdsProdutos);
+      finally
+         if xCabecalhoPedido <> nil then
+            FreeAndNil(xCabecalhoPedido);
+      end;
+   except
+      on E : Exception do
+         MessageDlg(e.Message, mtError,[mbOk],0);
+   end;
+end;
+
+end.

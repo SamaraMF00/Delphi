@@ -1,0 +1,4 @@
+2021-12-06 08:08:46  000047C8 DEBUG  : [TMQPApi                         ] Cancelando pagamento ID: 4628
+2021-12-06 08:08:47  000040C8 DEBUG  : [TMQPApi                         ] Consultando método: https://sandboxpayment.mentesquepensam.com.br/api/Payment/4628
+2021-12-06 08:37:35  0000250C DEBUG  : [TMQPApi                         ] Cancelando pagamento ID: 4633
+2021-12-06 08:37:39  00004350 DEBUG  : [TMQPApi                         ] Consultando método: https://sandboxpayment.mentesquepensam.com.br/api/Payment/4633

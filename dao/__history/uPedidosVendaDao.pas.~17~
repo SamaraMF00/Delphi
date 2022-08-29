@@ -1,0 +1,212 @@
+unit uCabecalhoPedidoDao;
+
+interface
+
+uses SqlExpr, SimpleDS, Db , Classes, SysUtils, DateUtils,
+     StdCtrls, DBClient, Provider;
+
+type
+
+   TCabecalhoPedidoDao = Class
+      private
+         vConexao: TSQLConnection;
+    function InserirCabecalhoPedido(pObjeto: TObject): Boolean;
+    function AlterarCabecalhoPedido(pObjeto: TObject;
+      pCondicao: String): Boolean;
+      public
+         constructor Create(pConexao : TSQLConnection);
+         procedure CarregaLista(pCampos, pCondicao: String; pClient: TClientDataSet);
+         function RetornaCabecalhoPedido(pCondicao: String): TObject;
+      end;
+implementation
+
+uses
+   uConexao;
+
+constructor TCabecalhoPedidoDao.Create(pConexao: TSQLConnection);
+begin
+   Self.vConexao := pConexao;
+end;
+
+procedure TCabecalhoPedidoDao.CarregaLista(pCampos, pCondicao: String; pClient: TClientDataSet);
+var
+   xQrySelect: TSQLQuery;
+   xProvider: TDataSetProvider;
+begin
+  try
+     try
+        xProvider := nil;
+
+        xQrySelect := TSQLQuery.Create(nil);
+        xQrySelect.SQLConnection := vConexao;
+
+        xQrySelect.SQL.Text := 'SELECT '+pCampos+' FROM CABECALHO_PEDIDO' +#13;
+
+        if pCondicao <> '' then
+           xQrySelect.SQL.Add(' WHERE '+pCondicao);
+
+        xProvider := TDataSetProvider.Create(nil);
+        xProvider.DataSet := xQrySelect;
+
+        if pClient.Active then
+        begin
+           pClient.EmptyDataSet;
+           pClient.Fields.Clear;
+           pClient.FieldDefs.Clear;
+           pClient.Close;
+        end;
+
+        pClient.SetProvider(xProvider);
+        pClient.Open;
+        pClient.SetProvider(nil);
+     finally
+        if xQrySelect <> nil then
+        begin
+           xQrySelect.Close;
+           FreeAndNil(xQrySelect);
+        end;
+
+        if xProvider <> nil then
+           FreeAndNil(xProvider);
+     end;
+  except
+     on E: Exception do
+     begin
+        raise Exception.Create('Não foi possível retornar os registros da '+
+           'tabela CABECALHO_PEDIDO.'+#13+ 'Motivo: '+e.Message);
+     end;
+  end;
+end;
+
+function TCabecalhoPedidoDao.RetornaCabecalhoPedido(pCondicao: String): TObject;
+var
+   xQry: TSQLQuery;
+begin
+   try
+      try
+         Result := nil;
+         xQry := nil;
+
+         xQry := TSQLQuery.Create(nil);
+         xQry.SQLConnection := vConexao;
+         xQry.Close;
+         xQry.SQL.Text := 'SELECT * FROM CABECALHO_PEDIDOS';
+
+         if pCondicao <> '' then
+            if Pos('WHERE', UpperCase(pCondicao)) > 0 then
+               xQry.SQL.Add(pCondicao)
+            else
+               xQry.SQL.Add(' WHERE ' + pCondicao);
+
+         xQry.Open;
+
+         if xQry.IsEmpty then
+            Exit;
+
+         Result.NumPedido := xQry.FieldByName('NumPedido').AsString;
+         Result.DataEmissao := xQry.FieldByName('DataEmissao').AsString;
+         Result.CodCliente := xQry.FieldByName('CodCliente').AsString;
+         Result.ValorTotal := xQry.FieldByName('ValorTotal').AsString;
+      finally
+         if xQry <> nil then
+         begin
+            xQry.Close;
+            FreeAndNil(xQry);
+         end;
+      end;
+   except
+      on E: Exception do
+         raise Exception.Create(
+            'Não foi possível retornar o registro da tabela CABECALHO_PEDIDO. '+
+            E.Message);
+   end;
+end;
+
+function TCabecalhoPedidoDao.InserirCabecalhoPedido(pObjeto: TObject): Boolean;
+var
+   xQry: TSQLQuery;
+begin
+   try
+      try
+         Result := False;
+         xQry := nil;
+
+         xQry := TSQLQuery.Create(nil);
+         xQry.SQLConnection := vConexao;
+         xQry.Close;
+         xQry.SQL.Text :=
+            ' INSERT INTO CABECALHO_PEDIDO (NUMPEDIDO, DATAEMISSAO,    '+
+            ' CODCLIENTE, VALORTOTAL) VALUES (:NUMPEDIDO, :DATAEMISSAO,'+
+            ' :CODCLIENTE, :VALORTOTAL)';
+
+         xQry.ParamByName('NUMPEDIDO').AsString := pObjeto.NumPedido;
+         xQry.ParamByName('DATAEMISSAO').AsString := pObjeto.DataEmissao;
+         xQry.ParamByName('CODCLIENTE').AsString := pObjeto.CodCliente;
+         xQry.ParamByName('VALORTOTAL').AsString := pObjeto.ValorTotal;
+         xQry.ExecSQL;
+
+         Result := True;
+      finally
+         if xQry <> nil then
+         begin
+            xQry.Close;
+            FreeAndNil(xQry);
+         end;
+      end;
+   except
+      on E: Exception do
+         raise Exception.Create(
+            'Não foi possível inserir o registro da tabela CABECALHO_PEDIDO. '+
+            E.Message);
+   end;
+end;
+
+function TCabecalhoPedidoDao.AlterarCabecalhoPedido(pObjeto: TObject; pCondicao: String): Boolean;
+var
+   xQry: TSQLQuery;
+begin
+   try
+      try
+         Result := False;
+         xQry := nil;
+
+         xQry := TSQLQuery.Create(nil);
+         xQry.SQLConnection := vConexao;
+         xQry.Close;
+         xQry.SQL.Text :=
+            ' UPDATE CABECALHO_PEDIDO SET '+
+            ' NUMPEDIDO = :NUMPEDIDO,     '+
+            ' DATAEMISSAO = :DATAEMISSAO, '+
+            ' CODCLIENTE = :CODCLIENTE,   '+
+            ' VALORTOTAL - :VALORTOTAL)   ';
+
+         if pCondicao <> '' then
+            if Pos('WHERE', UpperCase(pCondicao)) > 0 then
+               xQry.SQL.Add(pCondicao)
+            else
+               xQry.SQL.Add(' WHERE ' + pCondicao);
+
+         xQry.ParamByName('NUMPEDIDO').AsString := pObjeto.NumPedido;
+         xQry.ParamByName('DATAEMISSAO').AsString := pObjeto.DataEmissao;
+         xQry.ParamByName('CODCLIENTE').AsString := pObjeto.CodCliente;
+         xQry.ParamByName('VALORTOTAL').AsString := pObjeto.ValorTotal;
+         xQry.ExecSQL;
+
+         Result := True;
+      finally
+         if xQry <> nil then
+         begin
+            xQry.Close;
+            FreeAndNil(xQry);
+         end;
+      end;
+   except
+      on E: Exception do
+         raise Exception.Create(
+            'Não foi possível inserir o registro da tabela CABECALHO_PEDIDO. '+
+            E.Message);
+   end;
+end;
+
+
+end.

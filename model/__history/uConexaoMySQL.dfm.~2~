@@ -1,0 +1,24 @@
+object DataModule1: TDataModule1
+  OldCreateOrder = False
+  Height = 150
+  Width = 215
+  object conBDVendas: TFDConnection
+    Params.Strings = (
+      'Database=bdvendas'
+      'User_Name=root'
+      'Password=070802@Sa'
+      'DriverID=MySQL')
+    Left = 24
+    Top = 8
+  end
+  object dvrMySQL: TFDPhysMySQLDriverLink
+    VendorLib = 'C:\Users\SamaraFerreira\Desktop\ProjetoWK\BD\libmysql.dll'
+    Left = 120
+    Top = 8
+  end
+  object waitBDVendas: TFDGUIxWaitCursor
+    Provider = 'Forms'
+    Left = 144
+    Top = 56
+  end
+end

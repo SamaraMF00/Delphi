@@ -1,0 +1,60 @@
+unit uCabecalhoPedido;
+
+interface
+
+uses
+   Classes;
+
+type
+   TCabecalhoPedido = class(TPersistent)
+   private
+      vNumPedido,
+      vCodProd: Integer;
+      vVlrUnitario,
+      vValorrTotal: Double;
+      vDataEmissao: TDateTime;
+   public
+      constructor Create;
+   published
+      property IdItem: Integer read vIdItem write vIdItem;
+      property Quantidade: Integer read vQuantidade write vQuantidade;
+      property NumPedido: Integer read vNumPedido write vNumPedido;
+      property CodProd: Integer read vCodProd write vCodProd;
+      property VlrUnitario: Double read vVlrUnitario write vVlrUnitario;
+      property VlrTotal: Double read vVlrTotal write vVlrTotal;
+   end;
+
+   TColCabecalhoPedido = Class(TList)
+   public
+      function  Retorna(pIndex: Integer): TCabecalhoPedido;
+      procedure Adiciona(pObj: TObject);
+   end;
+
+implementation
+
+{ TItensPedido }
+
+constructor TCabecalhoPedido.Create;
+begin
+   Self.vIdItem := 0;
+   Self.vQuantidade := 0;
+   Self.vNumPedido := 0;
+   Self.vCodProd := 0;
+   Self.vVlrUnitario := 0;
+   Self.vVlrTotal := 0;
+end;
+
+{ TColItensPedido }
+
+procedure TColCabecalhoPedido.Adiciona(pObj: TObject);
+begin
+   Self.Add(TCabecalhoPedido(pObj));
+end;
+
+function TColCabecalhoPedido.Retorna(pIndex: Integer): TCabecalhoPedido;
+begin
+   Result := TCabecalhoPedido(Self[pIndex]);
+end;
+
+end.
+

@@ -1,0 +1,70 @@
+unit uProdutosDao;
+
+interface
+
+uses SqlExpr, SimpleDS, Db , Classes, SysUtils, DateUtils,
+     StdCtrls, DBClient, Provider, UProdutos;
+
+type
+
+   TProdutosDao = Class
+      private
+         vConexao: TSQLConnection;
+      public
+         constructor Create(pConexao : TSQLConnection);
+         function RetornaProduto(pCondicao: String): TProdutos;
+      end;
+implementation
+
+uses
+   uConexao;
+
+constructor TProdutosDao.Create(pConexao: TSQLConnection);
+begin
+   Self.vConexao := pConexao;
+end;
+
+function TProdutosDao.RetornaProduto(pCondicao: String): TProdutos;
+var
+   xQry: TSQLQuery;
+begin
+   try
+      try
+         Result := nil;
+         xQry := nil;
+
+         xQry := TSQLQuery.Create(nil);
+         xQry.SQLConnection := vConexao;
+         xQry.Close;
+         xQry.SQL.Text := 'SELECT * FROM PRODUTOS';
+
+         if pCondicao <> '' then
+            if Pos('WHERE', UpperCase(pCondicao)) > 0 then
+               xQry.SQL.Add(pCondicao)
+            else
+               xQry.SQL.Add(' WHERE ' + pCondicao);
+
+         xQry.Open;
+
+         if xQry.IsEmpty then
+            Exit;
+
+         Result.CodProd := xQry.FieldByName('CodProd').AsInteger;
+         Result.Descricao := xQry.FieldByName('Descricao').AsString;
+         Result.PrecoVenda := xQry.FieldByName('PrecoVenda').AsFloat;
+      finally
+         if xQry <> nil then
+         begin
+            xQry.Close;
+            FreeAndNil(xQry);
+         end;
+      end;
+   except
+      on E: Exception do
+         raise Exception.Create(
+            'Não foi possível retornar o registro da tabela CLIENTE. '+
+            E.Message);
+   end;
+end;
+
+end.

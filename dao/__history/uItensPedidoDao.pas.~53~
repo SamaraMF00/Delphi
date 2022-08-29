@@ -1,0 +1,301 @@
+unit uItensPedidoDao;
+
+interface
+
+uses SqlExpr, SimpleDS, Db , Classes, SysUtils, DateUtils,
+     StdCtrls, DBClient, Provider, uItensPedido, FireDAC.Comp.Client, FireDAC.Phys.MySQL;
+
+type
+
+   TItensPedidoDao = Class
+      private
+         vConexao: TFDConnection;
+      public
+         constructor Create(pConexao : TFDConnection);
+         procedure CarregaLista(pCondicao: String; var pClient: TClientDataSet);
+         function RetornaListaItensPedido(pCondicao: String): TColItensPedido;
+         function InserirItensPedido(pObjeto: TItensPedido): Boolean;
+         function AlterarItensPedido(pObjeto: TItensPedido; pCondicao: String): Boolean;
+         function InsereColecaoItensPedido(pItensPedido: TColItensPedido): Boolean;
+         function DeletarCabecalhoPedido(pCondicao: String): Boolean;
+      end;
+implementation
+
+uses
+   uConexao;
+
+constructor TItensPedidoDao.Create(pConexao: TFDConnection);
+begin
+   Self.vConexao := pConexao;
+end;
+
+procedure TItensPedidoDao.CarregaLista(pCondicao: String; var pClient: TClientDataSet);
+var
+   xQrySelect: TFDQuery;
+   xProvider: TDataSetProvider;
+begin
+  try
+     try
+        xProvider := nil;
+
+        xQrySelect := TFDQuery.Create(nil);
+        xQrySelect.Connection := vConexao;
+        xQrySelect.Connection.Transaction.StartTransaction;
+
+        xQrySelect.SQL.Text :=
+           ' SELECT * FROM ITENS_PEDIDO IT '+#13+
+           ' INNER JOIN PRODUTOS PD ON     '+#13+
+           ' PD.CODPROD = IT.CODPROD       ';
+
+        if pCondicao <> '' then
+           xQrySelect.SQL.Add(' WHERE '+pCondicao);
+
+        xProvider := TDataSetProvider.Create(nil);
+        xProvider.DataSet := xQrySelect;
+
+        if pClient.Active then
+        begin
+           pClient.EmptyDataSet;
+           pClient.Fields.Clear;
+           pClient.FieldDefs.Clear;
+           pClient.Close;
+        end;
+
+        pClient.SetProvider(xProvider);
+        pClient.Open;
+        pClient.SetProvider(nil);
+
+        xQrySelect.Connection.Transaction.Commit;
+     finally
+        if xQrySelect <> nil then
+        begin
+           xQrySelect.Close;
+           FreeAndNil(xQrySelect);
+        end;
+
+        if xProvider <> nil then
+           FreeAndNil(xProvider);
+     end;
+  except
+     on E: Exception do
+     begin
+        raise Exception.Create('Não foi possível retornar os registros da '+
+           'tabela ITENS_PEDIDO.'+#13+ 'Motivo: '+e.Message);
+        xQrySelect.Connection.Transaction.Rollback;
+     end;
+  end;
+end;
+
+function TItensPedidoDao.RetornaListaItensPedido(pCondicao: String): TColItensPedido;
+var
+   xQry: TFDQuery;
+   xObjItensPedido: TItensPedido;
+begin
+   try
+      try
+         Result := nil;
+         xQry := nil;
+         xObjItensPedido := nil;
+
+         xQry := TFDQuery.Create(nil);
+         xQry.Connection := vConexao;
+         xQry.Close;
+         xQry.SQL.Text := 'SELECT * FROM ITENS_PEDIDO';
+
+         if pCondicao <> '' then
+            if Pos('WHERE', UpperCase(pCondicao)) > 0 then
+               xQry.SQL.Add(pCondicao)
+            else
+               xQry.SQL.Add(' WHERE ' + pCondicao);
+
+         xQry.Open;
+
+         if xQry.IsEmpty then
+            Exit;
+
+         Result := TColItensPedido.Create;
+
+         while not (xQry.Eof) do
+         begin
+            xObjItensPedido := TItensPedido.Create;
+            xObjItensPedido.IdItem      := xQry.FieldByName('IdItem'     ).AsInteger;
+            xObjItensPedido.NumPedido   := xQry.FieldByName('NumPedido'  ).AsInteger;
+            xObjItensPedido.CodProd     := xQry.FieldByName('CodProd'    ).AsInteger;
+            xObjItensPedido.Quantidade  := xQry.FieldByName('Quantidade' ).AsInteger;
+            xObjItensPedido.VlrUnitario := xQry.FieldByName('VlrUnitario').AsFloat;
+            xObjItensPedido.VlrTotal    := xQry.FieldByName('VlrTotal'   ).AsFloat;
+            Result.Add(xObjItensPedido);
+            xQry.Next;
+         end;
+      finally
+         if xQry <> nil then
+         begin
+            xQry.Close;
+            FreeAndNil(xQry);
+         end;
+         if xObjItensPedido <> nil then
+            FreeAndNil(xObjItensPedido);
+      end;
+   except
+      on E: Exception do
+         raise Exception.Create(
+            'Não foi possível retornar o registro da tabela ITENS_PEDIDO. '+
+            E.Message);
+   end;
+end;
+
+function TItensPedidoDao.InserirItensPedido(pObjeto: TItensPedido): Boolean;
+var
+   xQry: TFDQuery;
+begin
+   try
+      try
+         Result := False;
+         xQry := nil;
+
+         xQry := TFDQuery.Create(nil);
+         xQry.Connection := vConexao;
+         xQry.Connection.Transaction.StartTransaction;
+         xQry.Close;
+         xQry.SQL.Text :=
+            ' INSERT INTO ITENS_PEDIDO (NUMPEDIDO, CODPROD, QUANTIDADE, '+#13+
+            ' VLRUNITARIO, VLRTOTAL) VALUES (:NUMPEDIDO, :CODPROD,      '+#13+
+            ' :QUANTIDADE, :VLRUNITARIO, :VLRTOTAL)                     ';
+
+         xQry.ParamByName('NumPedido'  ).AsInteger := pObjeto.NumPedido;
+         xQry.ParamByName('CodProd'    ).AsInteger := pObjeto.CodProd;
+         xQry.ParamByName('Quantidade' ).AsInteger := pObjeto.Quantidade;
+         xQry.ParamByName('VlrUnitario').AsFloat   := pObjeto.VlrUnitario;
+         xQry.ParamByName('VlrTotal'   ).AsFloat   := pObjeto.VlrTotal;
+         xQry.ExecSQL;
+         xQry.Connection.Transaction.Commit;
+
+         Result := True;
+      finally
+         if xQry <> nil then
+         begin
+            xQry.Close;
+            FreeAndNil(xQry);
+         end;
+      end;
+   except
+      on E: Exception do
+      begin
+         raise Exception.Create(
+            'Não foi possível inserir o registro da tabela ITENS_PEDIDO. '+
+            E.Message);
+         xQry.Connection.Transaction.Rollback;
+      end;
+   end;
+end;
+
+function TItensPedidoDao.InsereColecaoItensPedido(pItensPedido: TColItensPedido): Boolean;
+var
+   i: Integer;
+begin
+   Result := False;
+
+   for i := 0 to pItensPedido.count -1 do
+      if not self.InserirItensPedido(pItensPedido.Retorna(i)) then
+         Exit;
+
+   Result := True;
+end;
+
+function TItensPedidoDao.AlterarItensPedido(pObjeto: TItensPedido; pCondicao: String): Boolean;
+var
+   xQry: TFDQuery;
+begin
+   try
+      try
+         Result := False;
+         xQry := nil;
+
+         xQry := TFDQuery.Create(nil);
+         xQry.Connection := vConexao;
+         xQry.Connection.Transaction.StartTransaction;
+         xQry.Close;
+         xQry.SQL.Text :=
+            ' UPDATE ITENS_PEDIDO SET     '+#13+
+            ' NUMPEDIDO   = :NUMPEDIDO,   '+#13+
+            ' DATAEMISSAO = :DATAEMISSAO, '+#13+
+            ' CODCLIENTE  = :CODCLIENTE,  '+#13+
+            ' VALORTOTAL  = :VALORTOTAL)  ';
+
+         if pCondicao <> '' then
+            if Pos('WHERE', UpperCase(pCondicao)) > 0 then
+               xQry.SQL.Add(pCondicao)
+            else
+               xQry.SQL.Add(' WHERE ' + pCondicao);
+
+         xQry.ParamByName('NumPedido'  ).AsInteger := pObjeto.NumPedido;
+         xQry.ParamByName('CodProd'    ).AsInteger := pObjeto.CodProd;
+         xQry.ParamByName('Quantidade' ).AsInteger := pObjeto.Quantidade;
+         xQry.ParamByName('VlrUnitario').AsFloat   := pObjeto.VlrUnitario;
+         xQry.ParamByName('VlrTotal'   ).AsFloat   := pObjeto.VlrTotal;
+         xQry.ExecSQL;
+         xQry.Connection.Transaction.Commit;
+
+         Result := True;
+      finally
+         if xQry <> nil then
+         begin
+            xQry.Close;
+            FreeAndNil(xQry);
+         end;
+      end;
+   except
+      on E: Exception do
+      begin
+         raise Exception.Create(
+            'Não foi possível alterar o registro na tabela ITENS_PEDIDO. '+
+            E.Message);
+         xQry.Connection.Transaction.Rollback;
+      end;
+   end;
+end;
+
+function TItensPedidoDao.DeletarCabecalhoPedido(pCondicao: String): Boolean;
+var
+   xQry: TFDQuery;
+begin
+   try
+      try
+         Result := False;
+         xQry := nil;
+
+         xQry := TFDQuery.Create(nil);
+         xQry.Connection := vConexao;
+         xQry.Connection.Transaction.StartTransaction;
+         xQry.Close;
+         xQry.SQL.Text := ' DELETE FROM ITENS_PEDIDO ';
+
+         if pCondicao <> '' then
+            if Pos('WHERE', UpperCase(pCondicao)) > 0 then
+               xQry.SQL.Add(pCondicao)
+            else
+               xQry.SQL.Add(' WHERE ' + pCondicao);
+
+         xQry.ExecSQL;
+         xQry.Connection.Transaction.Commit;
+
+         Result := True;
+      finally
+         if xQry <> nil then
+         begin
+            xQry.Close;
+            FreeAndNil(xQry);
+         end;
+      end;
+   except
+      on E: Exception do
+      begin
+         raise Exception.Create(
+            'Não foi possível deletar o registro na tabela ITENS_PEDIDO. '+
+            E.Message);
+         xQry.Connection.Transaction.Rollback;
+      end;
+   end;
+end;
+
+end.

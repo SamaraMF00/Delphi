@@ -1,0 +1,18 @@
+object DataModule1: TDataModule1
+  OldCreateOrder = False
+  Height = 150
+  Width = 215
+  object conMySQL: TFDConnection
+    Left = 32
+    Top = 32
+  end
+  object dvrMySQL: TFDPhysMySQLDriverLink
+    Left = 88
+    Top = 32
+  end
+  object waitConexao: TFDGUIxWaitCursor
+    Provider = 'Forms'
+    Left = 136
+    Top = 32
+  end
+end

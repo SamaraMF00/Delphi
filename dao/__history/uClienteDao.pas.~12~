@@ -1,0 +1,123 @@
+unit uClienteDao;
+
+interface
+
+uses SqlExpr, SimpleDS, Db , Classes, SysUtils, DateUtils,
+     StdCtrls, DBClient, Provider, UCliente,FireDAC.Comp.Client, FireDAC.Phys.MySQL;
+
+type
+
+   TClienteDao = Class
+      private
+         vConexao: TFDConnection;
+      public
+         constructor Create(pConexao : TFDConnection);
+         procedure CarregaLista(pCampos, pCondicao: String; pClient: TClientDataSet);
+         function RetornaCliente(pCondicao: String): TCliente;
+      end;
+implementation
+
+uses
+   uConexao;
+
+constructor TClienteDao.Create(pConexao: TFDConnection);
+begin
+   Self.vConexao := pConexao;
+end;
+
+procedure TClienteDao.CarregaLista(pCampos, pCondicao: String; pClient: TClientDataSet);
+var
+   xQrySelect: TFDQuery;
+   xProvider: TDataSetProvider;
+begin
+  try
+     try
+        xProvider := nil;
+
+        xQrySelect := TFDQuery.Create(nil);
+        xQrySelect.SQLConnection := vConexao;
+
+        xQrySelect.SQL.Text := 'SELECT '+pCampos+' FROM CLIENTE' +#13;
+
+        if pCondicao <> '' then
+           xQrySelect.SQL.Add(' WHERE '+pCondicao);
+
+        xProvider := TDataSetProvider.Create(nil);
+        xProvider.DataSet := xQrySelect;
+
+        if pClient.Active then
+        begin
+           pClient.EmptyDataSet;
+           pClient.Fields.Clear;
+           pClient.FieldDefs.Clear;
+           pClient.Close;
+        end;
+
+        pClient.SetProvider(xProvider);
+        pClient.Open;
+        pClient.SetProvider(nil);
+
+     finally
+        if xQrySelect <> nil then
+        begin
+           xQrySelect.Close;
+           FreeAndNil(xQrySelect);
+        end;
+
+        if xProvider <> nil then
+           FreeAndNil(xProvider);
+     end;
+  except
+     on E: Exception do
+     begin
+        raise Exception.Create('Não foi possível retornar os registros da '+
+           'tabela CLIENTE.'+#13+ 'Motivo: '+e.Message);
+     end;
+  end;
+end;
+
+function TClienteDao.RetornaCliente(pCondicao: String): TCliente;
+var
+   xQry: TSQLQuery;
+begin
+   try
+      try
+         Result := nil;
+         xQry := nil;
+
+         xQry := TSQLQuery.Create(nil);
+         xQry.SQLConnection := vConexao;
+         xQry.Close;
+         xQry.SQL.Text := 'SELECT * FROM CLIENTE';
+
+         if pCondicao <> '' then
+            if Pos('WHERE', UpperCase(pCondicao)) > 0 then
+               xQry.SQL.Add(pCondicao)
+            else
+               xQry.SQL.Add(' WHERE ' + pCondicao);
+
+         xQry.Open;
+
+         if xQry.IsEmpty then
+            Exit;
+
+         Result.CodCliente := xQry.FieldByName('CodCliente').AsInteger;
+         Result.Nome := xQry.FieldByName('Nome').AsString;
+         Result.Cidade := xQry.FieldByName('Cidade').AsString;
+         Result.UF := xQry.FieldByName('UF').AsString;
+      finally
+         if xQry <> nil then
+         begin
+            xQry.Close;
+            FreeAndNil(xQry);
+         end;
+      end;
+   except
+      on E: Exception do
+         raise Exception.Create(
+            'Não foi possível retornar o registro da tabela CLIENTE. '+
+            E.Message);
+   end;
+end;
+
+end.

@@ -1,0 +1,160 @@
+unit uClienteController;
+
+interface
+
+uses
+   SysUtils, uCliente, UClienteDao;
+
+type
+
+   TClienteController = class
+      private
+
+      public
+         constructor create;
+         function GravaAliquotas(pColConfAliq: TColConfAliq;
+            pCodEmpresa: String): Boolean;
+         function BuscaCliente(pCodCliente: string): TCliente;
+         function BuscaParamSped(pCodEmpresa: string): TParamSped;
+      published
+         class function get: TClienteController;
+   end;
+
+implementation
+
+uses
+   uConexao;
+
+var
+   _instance: TClienteController;
+
+constructor TClienteController.Create;
+begin
+   inherited Create;
+end;
+
+class function TClienteController.get: TClienteController;
+begin
+   if _instance = nil then
+      _instance := TClienteController.Create;
+
+   Result := _instance;
+end;
+
+function TClienteController.BuscaCliente(pCodEmpresa: string): TCliente;
+var
+   xConfAliq: TClienteDao;
+begin
+   try
+      try
+         Result := nil;
+
+         xConfAliq :=
+            TClienteDao.Create(TConexao.getInstance.getConn);
+
+         Result :=
+            xConfAliq.RetornaLista('CodEmpresa = '+ pCodEmpresa);
+      finally
+         if xConfAliq <> nil then
+            FreeAndNil(xConfAliq);
+      end;
+   except
+      on E : Exception do
+      begin
+         Raise Exception.Create(
+            'Falha ao retornar dados de alíquotas [Controller]. '+e.Message);
+      end;
+   end;
+end;
+
+function TClienteController.GravaAliquotas(pColConfAliq: TColConfAliq;
+   pCodEmpresa: String): Boolean;
+var
+   xConfAliqDao : TClienteDao;
+   xConfAliq: TConfAliq;
+   xParamSped: TParamsped;
+   xParamSpedDao: TParamspedDao;
+begin
+   try
+      try
+         TConexao.Getinstance.iniciaTransacao;
+
+         Result := False;
+
+         xParamSpedDao :=
+            TParamspedDao.Create(TConexao.getInstance.getConn);
+
+         xConfAliqDao :=
+            TClienteDao.Create(TConexao.getInstance.getConn);
+
+         xConfAliq := xConfAliqDao.Retorna('CodEmpresa = ' + pCodEmpresa);
+
+         xParamSped := BuscaParamSped(pCodEmpresa);
+
+         if xParamSped.Aliqicmsprodutonacional > 0 then
+            xParamSpedDao.UpdateZerarAliquotas(pCodEmpresa);
+
+         if xConfAliq = nil then
+         begin
+            xConfAliqDao.InsereLista(pColConfAliq);
+         end
+         else
+         begin
+            xConfAliqDao.Deleta('CodEmpresa = '+ pCodEmpresa);
+            xConfAliqDao.InsereLista(pColConfAliq);
+         end;
+
+         TConexao.Getinstance.confirmaTransacao;
+
+         Result := True;
+      finally
+         if xConfAliqDao <> nil then
+            FreeAndNil(xConfAliqDao);
+
+         if xConfAliq <> nil then
+            FreeAndNil(xConfAliq);
+
+         if xParamSped <> nil then
+            FreeAndNil(xParamSped);
+
+         if xParamSpedDao <> nil then
+            FreeAndNil(xParamSpedDao);
+      end;
+   except
+      on E : Exception do
+      begin
+         TConexao.Getinstance.cancelaTransacao;
+         Raise Exception.Create(
+            'Falha ao gravar os dados de alíquotas [Controller].'#13+
+            e.Message);
+      end;
+   end;
+end;
+
+function TClienteController.BuscaParamSped(pCodEmpresa: string): TParamSped;
+var
+   xParamSpedDao: TParamspedDao;
+begin
+   try
+      try
+         Result := nil;
+
+         xParamSpedDao :=
+            TParamspedDao.Create(TConexao.getInstance.getConn);
+
+         Result :=
+            xParamSpedDao.FRetorna(pCodEmpresa);
+      finally
+         if xParamSpedDao <> nil then
+            FreeAndNil(xParamSpedDao);
+      end;
+   except
+      on E : Exception do
+      begin
+         Raise Exception.Create(
+            'Falha ao retornar dados de Sped [Controller].'+e.Message);
+      end;
+   end;
+end;
+
+end.

@@ -1,0 +1,210 @@
+2021-12-30 12:11:34  00002D38 DEBUG  : [*] Registrando terminal: PREVENDA https://sandboxpayment.mentesquepensam.com.br
+2021-12-30 12:11:34  000042D0 DEBUG  : [TMQPApi                         ] Cadastrando Loja: {"name":"PREVENDA","externalReference":"PREVENDA","externalReferenceStore":"Filial00"}
+2021-12-30 12:11:34  00001AA8 DEBUG  : [TMQPApi                         ] Consultando método: https://sandboxpayment.mentesquepensam.com.br/api/Config/Pdv
+2021-12-30 12:11:36  000033BC ERRO   : [TMQPApi                         ] Falha no método: METODO_POST_PDV. Motivo:
+HTTP/1.1 500 Internal Server Error
+2021-12-30 12:11:36  00004110 ERRO   : [TMQPApi                         ] Falha no método: METODO_POST_PDV. Motivo:
+Point of sale with corresponding user and id exists
+2021-12-30 12:11:36  0000416C DEBUG  : [TMQPApi                         ] Tratando falha na leitura do Json:
+{
+  "type":"Error",
+  "title":"Point of sale with corresponding user and id exists",
+  "status":500,
+  "detail":"",
+  "instance":"",
+  "traceId":"00-d559741e737f184e998887c922bef5e8-33e6b9318b6f814f-00"
+}
+
+2021-12-30 12:11:40  0000104C DEBUG  : [*] Registrando terminal: PREVENDA https://sandboxpayment.mentesquepensam.com.br
+2021-12-30 12:11:40  00000D44 DEBUG  : [TMQPApi                         ] Cadastrando Loja: {"name":"PREVENDA","externalReference":"PREVENDA","externalReferenceStore":"Filial00"}
+2021-12-30 12:11:40  00004204 DEBUG  : [TMQPApi                         ] Consultando método: https://sandboxpayment.mentesquepensam.com.br/api/Config/Pdv
+2021-12-30 12:11:41  000024B8 ERRO   : [TMQPApi                         ] Falha no método: METODO_POST_PDV. Motivo:
+HTTP/1.1 500 Internal Server Error
+2021-12-30 12:11:41  0000280C ERRO   : [TMQPApi                         ] Falha no método: METODO_POST_PDV. Motivo:
+Point of sale with corresponding user and id exists
+2021-12-30 12:11:41  00002660 DEBUG  : [TMQPApi                         ] Tratando falha na leitura do Json:
+{
+  "type":"Error",
+  "title":"Point of sale with corresponding user and id exists",
+  "status":500,
+  "detail":"",
+  "instance":"",
+  "traceId":"00-78ce63065a70dc4c85896add2b341467-1120aae7f41eb347-00"
+}
+
+2021-12-30 12:11:44  00002150 DEBUG  : [*] Registrando terminal: PREVENDA https://sandboxpayment.mentesquepensam.com.br
+2021-12-30 12:11:44  00000DD8 DEBUG  : [TMQPApi                         ] Cadastrando Loja: {"name":"PREVENDA","externalReference":"PREVENDA","externalReferenceStore":"Filial00"}
+2021-12-30 12:11:44  000021D8 DEBUG  : [TMQPApi                         ] Consultando método: https://sandboxpayment.mentesquepensam.com.br/api/Config/Pdv
+2021-12-30 12:11:44  00001DE4 ERRO   : [TMQPApi                         ] Falha no método: METODO_POST_PDV. Motivo:
+HTTP/1.1 500 Internal Server Error
+2021-12-30 12:11:44  000040D0 DEBUG  : [TMQPApi                         ] Tratando falha na leitura do Json:
+{
+  "type":"Error",
+  "title":"Point of sale with corresponding user and id exists",
+  "status":500,
+  "detail":"",
+  "instance":"",
+  "traceId":"00-3f36112760c3d142a2cd9b45cb687aba-e18f64c608c1be49-00"
+}
+
+2021-12-30 12:11:44  00002118 ERRO   : [TMQPApi                         ] Falha no método: METODO_POST_PDV. Motivo:
+Point of sale with corresponding user and id exists
+2021-12-30 12:28:33  00000D04 DEBUG  : [*] Registrando terminal: PREVENDA https://sandboxpayment.mentesquepensam.com.br
+2021-12-30 12:28:33  00001488 DEBUG  : [TMQPApi                         ] Cadastrando Loja: {"name":"PREVENDA","externalReference":"PREVENDA","externalReferenceStore":"Filial00"}
+2021-12-30 12:28:36  00004314 DEBUG  : [TMQPApi                         ] Consultando método: https://sandboxpayment.mentesquepensam.com.br/api/Config/Pdv
+2021-12-30 12:28:36  00002848 ERRO   : [TMQPApi                         ] Falha no método: METODO_POST_PDV. Motivo:
+HTTP/1.1 500 Internal Server Error
+2021-12-30 12:28:36  00002F44 DEBUG  : [TMQPApi                         ] Tratando falha na leitura do Json:
+{
+  "type":"Error",
+  "title":"Point of sale with corresponding user and id exists",
+  "status":500,
+  "detail":"",
+  "instance":"",
+  "traceId":"00-583d5319acb38648954cdd8e230d8d68-e91dc315935c584a-00"
+}
+
+2021-12-30 12:28:36  00004214 ERRO   : [TMQPApi                         ] Falha no método: METODO_POST_PDV. Motivo:
+Point of sale with corresponding user and id exists
+2021-12-30 12:34:49  0000171C DEBUG  : [*] Registrando terminal: PREVENDA https://sandboxpayment.mentesquepensam.com.br
+2021-12-30 12:34:49  00001984 DEBUG  : [TMQPApi                         ] Cadastrando Loja: {"name":"PREVENDA","externalReference":"PREVENDA","externalReferenceStore":"Filial00"}
+2021-12-30 12:34:51  00002BE4 DEBUG  : [TMQPApi                         ] Consultando método: https://sandboxpayment.mentesquepensam.com.br/api/Config/Pdv
+2021-12-30 12:34:52  000004A0 ERRO   : [TMQPApi                         ] Falha no método: METODO_POST_PDV. Motivo:
+HTTP/1.1 500 Internal Server Error
+2021-12-30 12:34:52  00004068 DEBUG  : [TMQPApi                         ] Tratando falha na leitura do Json:
+{
+  "type":"Error",
+  "title":"Point of sale with corresponding user and id exists",
+  "status":500,
+  "detail":"",
+  "instance":"",
+  "traceId":"00-529dd11ba81ba64e82ccd1608228ab4c-60e74636200abf41-00"
+}
+
+2021-12-30 12:34:52  00000D04 ERRO   : [TMQPApi                         ] Falha no método: METODO_POST_PDV. Motivo:
+Point of sale with corresponding user and id exists
+2021-12-30 12:40:57  00002658 DEBUG  : [*] Registrando terminal: prevenda3 https://sandboxpayment.mentesquepensam.com.br
+2021-12-30 12:40:57  00003A94 DEBUG  : [TMQPApi                         ] Cadastrando Loja: {"name":"prevenda3","externalReference":"prevenda3","externalReferenceStore":"Filial00"}
+2021-12-30 12:40:59  000010FC DEBUG  : [TMQPApi                         ] Consultando método: https://sandboxpayment.mentesquepensam.com.br/api/Config/Pdv
+2021-12-30 12:46:33  000035CC DEBUG  : [*] Registrando terminal: CHECKOUT2 https://sandboxpayment.mentesquepensam.com.br
+2021-12-30 12:46:33  00003328 DEBUG  : [TMQPApi                         ] Cadastrando Loja: {"name":"CHECKOUT2","externalReference":"CHECKOUT2","externalReferenceStore":"Filial00"}
+2021-12-30 12:46:34  00004264 DEBUG  : [TMQPApi                         ] Consultando método: https://sandboxpayment.mentesquepensam.com.br/api/Config/Pdv
+2021-12-30 12:53:42  000034B8 DEBUG  : [*] Registrando terminal: PREVENDA2 https://sandboxpayment.mentesquepensam.com.br
+2021-12-30 12:53:42  00000D90 DEBUG  : [TMQPApi                         ] Cadastrando Loja: {"name":"PREVENDA2","externalReference":"PREVENDA2","externalReferenceStore":"Filial00"}
+2021-12-30 12:53:44  00001AA8 DEBUG  : [TMQPApi                         ] Consultando método: https://sandboxpayment.mentesquepensam.com.br/api/Config/Pdv
+2021-12-30 12:53:45  000023A4 ERRO   : [TMQPApi                         ] Falha no método: METODO_POST_PDV. Motivo:
+HTTP/1.1 500 Internal Server Error
+2021-12-30 12:53:45  00001970 DEBUG  : [TMQPApi                         ] Tratando falha na leitura do Json:
+{
+  "type":"Error",
+  "title":"Point of sale with corresponding user and id exists",
+  "status":500,
+  "detail":"",
+  "instance":"",
+  "traceId":"00-a79162ecc2df3b468819e70ca4d660c9-9e4f7c08544d3846-00"
+}
+
+2021-12-30 12:53:45  00001A74 ERRO   : [TMQPApi                         ] Falha no método: METODO_POST_PDV. Motivo:
+Point of sale with corresponding user and id exists
+2021-12-30 12:53:57  00000E5C DEBUG  : [*] Registrando terminal: PREVENDA2 https://sandboxpayment.mentesquepensam.com.br
+2021-12-30 12:53:57  00004204 DEBUG  : [TMQPApi                         ] Cadastrando Loja: {"name":"PREVENDA2","externalReference":"PREVENDA2","externalReferenceStore":"Filial00"}
+2021-12-30 12:53:58  00000378 DEBUG  : [TMQPApi                         ] Consultando método: https://sandboxpayment.mentesquepensam.com.br/api/Config/Pdv
+2021-12-30 12:53:58  00000CC8 ERRO   : [TMQPApi                         ] Falha no método: METODO_POST_PDV. Motivo:
+HTTP/1.1 500 Internal Server Error
+2021-12-30 12:53:58  00003ED8 DEBUG  : [TMQPApi                         ] Tratando falha na leitura do Json:
+{
+  "type":"Error",
+  "title":"Point of sale with corresponding user and id exists",
+  "status":500,
+  "detail":"",
+  "instance":"",
+  "traceId":"00-a20b5075941c4140bd769ea5e7f1e22c-021487d96bfc194f-00"
+}
+
+2021-12-30 12:53:58  00003540 ERRO   : [TMQPApi                         ] Falha no método: METODO_POST_PDV. Motivo:
+Point of sale with corresponding user and id exists
+2021-12-30 12:55:37  00000EC8 DEBUG  : [*] Registrando terminal: PREVENDA2 https://sandboxpayment.mentesquepensam.com.br
+2021-12-30 12:55:37  00002BF4 DEBUG  : [TMQPApi                         ] Cadastrando Loja: {"name":"PREVENDA2","externalReference":"PREVENDA2","externalReferenceStore":"Filial00"}
+2021-12-30 12:55:38  00003F0C DEBUG  : [TMQPApi                         ] Consultando método: https://sandboxpayment.mentesquepensam.com.br/api/Config/Pdv
+2021-12-30 12:55:39  00001F7C ERRO   : [TMQPApi                         ] Falha no método: METODO_POST_PDV. Motivo:
+HTTP/1.1 500 Internal Server Error
+2021-12-30 12:55:39  00001038 ERRO   : [TMQPApi                         ] Falha no método: METODO_POST_PDV. Motivo:
+Point of sale with corresponding user and id exists
+2021-12-30 12:55:39  00000298 DEBUG  : [TMQPApi                         ] Tratando falha na leitura do Json:
+{
+  "type":"Error",
+  "title":"Point of sale with corresponding user and id exists",
+  "status":500,
+  "detail":"",
+  "instance":"",
+  "traceId":"00-103b7f8ec0c0fd4a93a397389aee4caa-74f508c900a84647-00"
+}
+
+2021-12-30 12:56:03  0000129C DEBUG  : [*] Registrando terminal: PREVENDA2 https://sandboxpayment.mentesquepensam.com.br
+2021-12-30 12:56:03  00002F44 DEBUG  : [TMQPApi                         ] Cadastrando Loja: {"name":"PREVENDA2","externalReference":"PREVENDA2","externalReferenceStore":"Filial00"}
+2021-12-30 12:56:03  00002410 DEBUG  : [TMQPApi                         ] Consultando método: https://sandboxpayment.mentesquepensam.com.br/api/Config/Pdv
+2021-12-30 12:56:06  0000407C ERRO   : [TMQPApi                         ] Falha no método: METODO_POST_PDV. Motivo:
+HTTP/1.1 500 Internal Server Error
+2021-12-30 12:56:06  00003DE0 ERRO   : [TMQPApi                         ] Falha no método: METODO_POST_PDV. Motivo:
+Point of sale with corresponding user and id exists
+2021-12-30 12:56:06  000024E4 DEBUG  : [TMQPApi                         ] Tratando falha na leitura do Json:
+{
+  "type":"Error",
+  "title":"Point of sale with corresponding user and id exists",
+  "status":500,
+  "detail":"",
+  "instance":"",
+  "traceId":"00-5755acebc43c8c4d8a5d596c4f04568c-45ab0bf9c797f943-00"
+}
+
+2021-12-30 12:56:21  0000106C DEBUG  : [*] Registrando terminal: PREVENDA3 https://sandboxpayment.mentesquepensam.com.br
+2021-12-30 12:56:21  00000D3C DEBUG  : [TMQPApi                         ] Cadastrando Loja: {"name":"PREVENDA3","externalReference":"PREVENDA3","externalReferenceStore":"Filial00"}
+2021-12-30 12:56:22  00000660 DEBUG  : [TMQPApi                         ] Consultando método: https://sandboxpayment.mentesquepensam.com.br/api/Config/Pdv
+2021-12-30 12:56:23  000038D8 ERRO   : [TMQPApi                         ] Falha no método: METODO_POST_PDV. Motivo:
+HTTP/1.1 500 Internal Server Error
+2021-12-30 12:56:23  00002310 DEBUG  : [TMQPApi                         ] Tratando falha na leitura do Json:
+{
+  "type":"Error",
+  "title":"Point of sale with corresponding user and id exists",
+  "status":500,
+  "detail":"",
+  "instance":"",
+  "traceId":"00-2c38c6082d801045a57655523de0ba03-babb298ab4144047-00"
+}
+
+2021-12-30 12:56:23  00003D44 ERRO   : [TMQPApi                         ] Falha no método: METODO_POST_PDV. Motivo:
+Point of sale with corresponding user and id exists
+2021-12-30 12:56:28  000042FC DEBUG  : [*] Registrando terminal: PREVENDA3 https://sandboxpayment.mentesquepensam.com.br
+2021-12-30 12:56:28  00004108 DEBUG  : [TMQPApi                         ] Cadastrando Loja: {"name":"PREVENDA3","externalReference":"PREVENDA3","externalReferenceStore":"Filial00"}
+2021-12-30 12:56:28  0000043C DEBUG  : [TMQPApi                         ] Consultando método: https://sandboxpayment.mentesquepensam.com.br/api/Config/Pdv
+2021-12-30 12:56:29  00004218 ERRO   : [TMQPApi                         ] Falha no método: METODO_POST_PDV. Motivo:
+HTTP/1.1 500 Internal Server Error
+2021-12-30 12:56:29  00001AC8 ERRO   : [TMQPApi                         ] Falha no método: METODO_POST_PDV. Motivo:
+Point of sale with corresponding user and id exists
+2021-12-30 12:56:29  00000E64 DEBUG  : [TMQPApi                         ] Tratando falha na leitura do Json:
+{
+  "type":"Error",
+  "title":"Point of sale with corresponding user and id exists",
+  "status":500,
+  "detail":"",
+  "instance":"",
+  "traceId":"00-666647e654b96347abb82b1f9dfb9cb1-4e999c0e2069864f-00"
+}
+
+2021-12-30 12:59:39  00002BB0 DEBUG  : [*] Registrando terminal: PREVENDA https://sandboxpayment.mentesquepensam.com.br
+2021-12-30 12:59:39  0000382C DEBUG  : [TMQPApi                         ] Cadastrando Loja: {"name":"PREVENDA","externalReference":"PREVENDA","externalReferenceStore":"Filial00"}
+2021-12-30 12:59:40  00002A34 DEBUG  : [TMQPApi                         ] Consultando método: https://sandboxpayment.mentesquepensam.com.br/api/Config/Pdv
+2021-12-30 12:59:42  00002968 ERRO   : [TMQPApi                         ] Falha no método: METODO_POST_PDV. Motivo:
+HTTP/1.1 500 Internal Server Error
+2021-12-30 12:59:42  00004188 DEBUG  : [TMQPApi                         ] Tratando falha na leitura do Json:
+{
+  "type":"Error",
+  "title":"Point of sale with corresponding user and id exists",
+  "status":500,
+  "detail":"",
+  "instance":"",
+  "traceId":"00-4cb9b01c4170a94e815631067a84ed32-4a48a18c53062b4e-00"
+}
+
+2021-12-30 12:59:42  000030B0 ERRO   : [TMQPApi                         ] Falha no método: METODO_POST_PDV. Motivo:
+Point of sale with corresponding user and id exists

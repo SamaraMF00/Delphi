@@ -1,0 +1,61 @@
+unit uItensPedido;
+
+interface
+
+uses
+   Classes;
+
+type
+   TItensPedido = class(TPersistent)
+   private
+      vId: Integer;
+      vCodEmpresa: String;
+      vNome: String;
+      vIdentificador: String;
+      vUsadoPor: String;
+      vFuncionalidade: Integer;
+   public
+      constructor Create;
+   published
+      property Id: Integer read vId write vId;
+      property CodEmpresa: String read vCodEmpresa write vCodEmpresa;
+      property Nome: String read vNome write vNome;
+      property Identificador: String read vIdentificador write vIdentificador;
+      property UsadoPor: String read vUsadoPor write vUsadoPor;
+      property Funcionalidade: Integer read vFuncionalidade write vFuncionalidade;
+   end;
+
+   TColItensPedido = Class(TList)
+   private
+   public
+      function  Retorna(pIndex: Integer): TItensPedido;
+      procedure Adiciona(pObj: TObject);
+   end;
+
+implementation
+
+{ TTerminalMQP }
+
+constructor TItensPedido.Create;
+begin
+   Self.vId := 0;
+   Self.vCodEmpresa := '';
+   Self.vNome := '';
+   Self.vIdentificador := '';
+   Self.vUsadoPor := '';
+   Self.vFuncionalidade := 0;
+end;
+
+{ TColTerminalMQP }
+
+procedure TColTerminalMQP.Adiciona(pObj: TObject);
+begin
+   Self.Add(TItensPedido(pObj));
+end;
+
+function TColTerminalMQP.Retorna(pIndex: Integer): TItensPedido;
+begin
+   Result := TItensPedido(Self[pIndex]);
+end;
+
+end.
