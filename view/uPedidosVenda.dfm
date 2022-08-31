@@ -240,30 +240,6 @@ object frmPedidosVenda: TfrmPedidosVenda
       OnKeyDown = FormKeyDown
       OnKeyPress = edtCodProdKeyPress
     end
-    object edtQuantidade: TNumEdit
-      Left = 312
-      Top = 88
-      Width = 56
-      Height = 21
-      Alignment = taRightJustify
-      Decimals = 0
-      Enabled = False
-      ShowSeparator = True
-      TabOrder = 5
-      OnKeyDown = FormKeyDown
-    end
-    object edtVlrUnitario: TNumEdit
-      Left = 390
-      Top = 88
-      Width = 59
-      Height = 21
-      Alignment = taRightJustify
-      Decimals = 2
-      Enabled = False
-      ShowSeparator = True
-      TabOrder = 6
-      OnKeyDown = FormKeyDown
-    end
     object edtNomeCliente: TEdit
       Left = 175
       Top = 38
@@ -397,6 +373,27 @@ object frmPedidosVenda: TfrmPedidosVenda
           Width = 53
           Visible = True
         end>
+    end
+    object edtQuantidade: TEdit
+      Left = 312
+      Top = 88
+      Width = 56
+      Height = 21
+      Enabled = False
+      TabOrder = 5
+      OnKeyDown = FormKeyDown
+      OnKeyPress = edtQuantidadeKeyPress
+    end
+    object edtVlrUnitario: TEdit
+      Left = 390
+      Top = 88
+      Width = 59
+      Height = 21
+      Enabled = False
+      TabOrder = 6
+      OnExit = edtVlrUnitarioExit
+      OnKeyDown = FormKeyDown
+      OnKeyPress = edtVlrUnitarioKeyPress
     end
   end
   object pnlBotoes: TPanel

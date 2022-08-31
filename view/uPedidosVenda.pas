@@ -5,7 +5,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls, Vcl.Buttons,
-  NumEdit, Data.DB, Vcl.Grids, Vcl.DBGrids, Data.Win.ADODB, Datasnap.DBClient,
+  Data.DB, Vcl.Grids, Vcl.DBGrids, Data.Win.ADODB, Datasnap.DBClient,
   Data.DBXMySQL, Data.SqlExpr;
 
 type
@@ -14,8 +14,6 @@ type
     edtNumPedido: TEdit;
     edtCodCliente: TEdit;
     edtCodProd: TEdit;
-    edtQuantidade: TNumEdit;
-    edtVlrUnitario: TNumEdit;
     lblNumPedido: TLabel;
     lblCodCliente: TLabel;
     edtNomeCliente: TEdit;
@@ -39,6 +37,8 @@ type
     cdsProdutosVlrUnitario: TFloatField;
     cdsProdutosVlrTotal: TFloatField;
     btnDeletar: TBitBtn;
+    edtQuantidade: TEdit;
+    edtVlrUnitario: TEdit;
     procedure edtNumPedidoKeyPress(Sender: TObject; var Key: Char);
     procedure edtCodClienteKeyPress(Sender: TObject; var Key: Char);
     procedure edtCodProdKeyPress(Sender: TObject; var Key: Char);
@@ -58,6 +58,9 @@ type
     procedure edtNumPedidoEnter(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure btnDeletarClick(Sender: TObject);
+    procedure edtQuantidadeKeyPress(Sender: TObject; var Key: Char);
+    procedure edtVlrUnitarioKeyPress(Sender: TObject; var Key: Char);
+    procedure edtVlrUnitarioExit(Sender: TObject);
   private
      vOpcaoTela: string;
      vKey: Word;
@@ -201,13 +204,34 @@ begin
       Key := #0;
 end;
 
+procedure TfrmPedidosVenda.edtQuantidadeKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+   if not SomenteNumeros(Key) then
+      Key := #0;
+end;
+
+procedure TfrmPedidosVenda.edtVlrUnitarioExit(Sender: TObject);
+begin
+   if edtVlrUnitario.Text <> '' then
+      edtVlrUnitario.Text := FormatFloat('###,##0.00', StrToFloat(edtVlrUnitario.Text));
+end;
+
+procedure TfrmPedidosVenda.edtVlrUnitarioKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+   if not SomenteNumeros(Key) then
+      Key := #0;
+end;
+
 function TfrmPedidosVenda.SomenteNumeros(pKey: char): Boolean;
 begin
    Result := True;
 
    if (pKey in ['0'..'9'] = false) and
       (Word(pKey) <> VK_Back) and
-      (Word(pKey) <> VK_Return) then
+      (Word(pKey) <> VK_Return) and
+      (pKey in [','] = False) then
       Result := False;
 end;
 
@@ -373,7 +397,7 @@ begin
          if xProdutos <> nil then
          begin
             edtDescricao.Text := xProdutos.Descricao;
-            edtVlrUnitario.Value := xProdutos.PrecoVenda;
+            edtVlrUnitario.Text := FormatFloat('###,##0.00', xProdutos.PrecoVenda);
          end
          else
             MessageDlg('Produto não cadastrado!', mtWarning,[mbOk],0);
@@ -392,8 +416,8 @@ begin
    vAlteracao := True;
    edtCodProd.Text := IntToStr(cdsProdutos.FieldByName('CodProd').AsInteger);
    edtDescricao.Text := cdsProdutos.FieldByName('Descricao').AsString;
-   edtQuantidade.Value := cdsProdutos.FieldByName('Quantidade').AsInteger;
-   edtVlrUnitario.Value := cdsProdutos.FieldByName('VlrUnitario').AsFloat;
+   edtQuantidade.Text := cdsProdutos.FieldByName('Quantidade').AsString;
+   edtVlrUnitario.Text := FormatFloat('###,##0.00', cdsProdutos.FieldByName('VlrUnitario').AsFloat);
    edtCodProd.Enabled := False;
    vValorTotal := vValorTotal - cdsProdutos.FieldByName('VlrTotal').AsFloat;
 end;
@@ -447,7 +471,7 @@ function TfrmPedidosVenda.validaQuantidade: Boolean;
 begin
    Result := False;
 
-   if (edtQuantidade.Value = 0) then
+   if (edtQuantidade.Text = '') or (edtQuantidade.Text = '0') then
    begin
       MessageDlg('Quantidade deve ser maior que 0.', mtWarning,[mbOk],0);
       if edtQuantidade.CanFocus then
@@ -462,7 +486,7 @@ function TfrmPedidosVenda.validaVlrUnitario: Boolean;
 begin
    Result := False;
 
-   if (edtVlrUnitario.Value = 0) then
+   if (edtVlrUnitario.Text = '') or (edtVlrUnitario.Text = '0,00') then
    begin
       MessageDlg('Valor unitário deve ser maior que 0.', mtWarning,[mbOk],0);
       if edtVlrUnitario.CanFocus then
@@ -500,8 +524,8 @@ begin
    cdsProdutos.FieldByName('CodProd').AsInteger := StrToInt(edtCodProd.Text);
    cdsProdutos.FieldByName('Descricao').AsString := edtDescricao.Text;
    cdsProdutos.FieldByName('Quantidade').AsInteger := StrToInt(edtQuantidade.Text);
-   cdsProdutos.FieldByName('VlrUnitario').AsFloat := edtVlrUnitario.Value;
-   cdsProdutos.FieldByName('VlrTotal').AsFloat := edtQuantidade.Value * edtVlrUnitario.Value;
+   cdsProdutos.FieldByName('VlrUnitario').AsFloat := StrToFloat(edtVlrUnitario.Text);
+   cdsProdutos.FieldByName('VlrTotal').AsFloat := StrToFloat(edtQuantidade.Text) * StrToFloat(edtVlrUnitario.Text);
    cdsProdutos.Post;
    cdsProdutos.EnableControls;
 
@@ -511,8 +535,8 @@ begin
    edtCodProd.Enabled := True;
    edtCodProd.Text := '';
    edtDescricao.Text := '';
-   edtQuantidade.Value := 0;
-   edtVlrUnitario.Value := 0;
+   edtQuantidade.Text := '';
+   edtVlrUnitario.Text := '';
 end;
 
 procedure TfrmPedidosVenda.limpaCampos;
@@ -522,8 +546,8 @@ begin
    edtNomeCliente.Text := '';
    edtCodProd.Text := '';
    edtDescricao.Text := '';
-   edtQuantidade.Value := 0;
-   edtVlrUnitario.Value := 0;
+   edtQuantidade.Text := '';
+   edtVlrUnitario.Text := '';
    lblTotalPedido.Caption := '';
    vValorTotal := 0;
 
