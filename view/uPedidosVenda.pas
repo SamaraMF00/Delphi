@@ -213,7 +213,7 @@ end;
 
 procedure TfrmPedidosVenda.edtVlrUnitarioExit(Sender: TObject);
 begin
-   if edtVlrUnitario.Text <> '' then
+   if StrToFloatDef(edtVlrUnitario.Text, 0) > 0 then
       edtVlrUnitario.Text := FormatFloat('###,##0.00', StrToFloat(edtVlrUnitario.Text));
 end;
 
@@ -485,7 +485,7 @@ function TfrmPedidosVenda.validaVlrUnitario: Boolean;
 begin
    Result := False;
 
-   if (edtVlrUnitario.Text = '') or (edtVlrUnitario.Text = '0,00') then
+   if StrToFloatDef(edtVlrUnitario.Text, 0) = 0 then
    begin
       MessageDlg('Valor unitário deve ser maior que 0.', mtWarning,[mbOk],0);
       if edtVlrUnitario.CanFocus then
