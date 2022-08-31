@@ -1,4 +1,11 @@
-Para coneção com o banco de dados é necessário que o mesmo seja criado na máquina onde serão executados os testes. 
-Para isso, na pasta "BD" deste projeto foram adicionados 2 arquivos .sql, um com os comandos que foram utilizados para criação do banco de dados(ComandosCriacaoBDVendas.sql) e o segundo sendo a exportação do banco (DataExportBdVendas.sql), para utiliza-lo basta realizar a importação para o MySQL.
+Versionamento: 
+* Delphi 10.2 Tokyo
+* MySQL 5.7 (por questões de compatibilidade)
 
+Para coneção com o banco de dados é necessário que o mesmo seja criado na máquina onde serão executados os testes. 
+Para isso, na pasta "BD" deste projeto foram adicionados 2 arquivos .sql, um com os comandos que foram utilizados 
+para criação do banco de dados(ComandosCriacaoBDVendas.sql) e o segundo sendo a exportação do banco 
+(DataExportBdVendas.sql), para utiliza-lo basta realizar a importação para o MySQL.
+
+Nesta pasta de documentação foi adionado um pequeno vídeo demostrando o funcionamento da tela desenvolvida.
 O .exe se encontra na pasta "win32".
