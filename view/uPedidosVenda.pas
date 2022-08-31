@@ -228,10 +228,9 @@ function TfrmPedidosVenda.SomenteNumeros(pKey: char): Boolean;
 begin
    Result := True;
 
-   if (pKey in ['0'..'9'] = false) and
+   if (pKey in ['0'..'9', ','] = false) and
       (Word(pKey) <> VK_Back) and
-      (Word(pKey) <> VK_Return) and
-      (pKey in [','] = False) then
+      (Word(pKey) <> VK_Return) then
       Result := False;
 end;
 
